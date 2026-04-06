@@ -149,6 +149,19 @@ define_tunables! {
         /// enabled.
         pub concurrency_support: bool,
 
+        /// Whether to allow recursive reentrance in component adapters.
+        ///
+        /// When enabled, the FACT compiler will not emit a trap for adapters
+        /// where the lift and lower instances are the same (or ancestors of
+        /// each other). This is needed for fused components where multiple
+        /// original component instances have been merged into one.
+        ///
+        /// This anticipates the Component Model spec's planned `recursive`
+        /// effect on function types (Concurrency.md TODO).
+        ///
+        /// Default: `false` (spec-compliant trapping behavior).
+        pub allow_recursive_reentrance: bool,
+
         /// Whether recording in RR is enabled or not. This is used primarily
         /// to signal checksum computation for compiled artifacts.
         pub recording: bool,

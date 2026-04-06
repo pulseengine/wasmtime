@@ -115,11 +115,13 @@ pub(super) fn compile(module: &mut Module<'_>, adapter: &AdapterData) {
     }
 
     // If the lift and lower instances are equal, or if one is an ancestor of
-    // the other, we trap unconditionally.  This ensures that recursive
-    // reentrance via an adapter is impossible.
-    if adapter.lift.instance == adapter.lower.instance
-        || adapter.lower.ancestors.contains(&adapter.lift.instance)
-        || adapter.lift.ancestors.contains(&adapter.lower.instance)
+    // the other, we trap unconditionally (unless recursive reentrance is
+    // explicitly allowed).  This ensures that recursive reentrance via an
+    // adapter is impossible in the default configuration.
+    if !module.tunables.allow_recursive_reentrance
+        && (adapter.lift.instance == adapter.lower.instance
+            || adapter.lower.ancestors.contains(&adapter.lift.instance)
+            || adapter.lift.ancestors.contains(&adapter.lower.instance))
     {
         let (mut compiler, _, _) = compiler(module, adapter);
         compiler.trap(Trap::CannotEnterComponent);

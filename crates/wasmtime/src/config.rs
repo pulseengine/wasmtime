@@ -1242,6 +1242,24 @@ impl Config {
         self
     }
 
+    /// Allow recursive reentrance in component model adapters.
+    ///
+    /// When enabled, the FACT compiler will not trap on adapters where the lift
+    /// and lower instances are the same (or ancestors of each other). This is
+    /// needed for fused components where multiple original component instances
+    /// have been merged into one by a fusion tool.
+    ///
+    /// This anticipates the Component Model spec's planned `recursive` effect
+    /// on function types (Concurrency.md TODO).
+    #[cfg(feature = "component-model-async")]
+    pub fn wasm_component_model_allow_recursive_reentrance(
+        &mut self,
+        enable: bool,
+    ) -> &mut Self {
+        self.tunables.allow_recursive_reentrance = Some(enable);
+        self
+    }
+
     /// This corresponds to the 📝 emoji in the component model specification.
     ///
     /// Please note that Wasmtime's support for this feature is _very_

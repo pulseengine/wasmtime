@@ -404,6 +404,9 @@ wasmtime_option_group! {
         /// Component model support for `error-context`: this corresponds
         /// to the 📝 emoji in the component model specification.
         pub component_model_error_context: Option<bool>,
+        /// Allow recursive reentrance in component model adapters.
+        /// Needed for fused components where caller and callee share one instance.
+        pub component_model_allow_recursive_reentrance: Option<bool>,
         /// GC support in the component model: this corresponds to the 🛸 emoji
         /// in the component model specification.
         pub component_model_gc: Option<bool>,
@@ -1152,6 +1155,7 @@ impl CommonOptions {
             ("component-model-async", component_model_async, wasm_component_model_async)
             ("component-model-async", component_model_async_builtins, wasm_component_model_async_builtins)
             ("component-model-async", component_model_async_stackful, wasm_component_model_async_stackful)
+            ("component-model-async", component_model_allow_recursive_reentrance, wasm_component_model_allow_recursive_reentrance)
             ("component-model-async", component_model_threading, wasm_component_model_threading)
             ("component-model", component_model_error_context, wasm_component_model_error_context)
             ("component-model", component_model_map, wasm_component_model_map)
